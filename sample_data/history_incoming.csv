@@ -1,0 +1,11 @@
+record,customer,kind,start_day,end_day,segment,target,note
+C001-E1,C001,change,0,,1,,首次归属北区
+C001-E2,C001,change,10,,2,,十日转东区
+C001-E3,C001,change,5,,3,,晚到变更：五日改西区
+C002-E1,C002,change,0,,1,,首次归属南区
+C002-E2,C002,change,8,,4,,转西区
+C002-R1,C002,revoke,12,,,C002-E2,撤销转区，仅回退该变更
+C003-S1,C003,settle,0,10,, ,账期0至10已结算
+C003-E1,C003,change,0,,5,,已结算账期归属五区
+C003-E2,C003,change,10,,6,,新账期归属六区
+C003-E3,C003,change,3,,7,,晚到变更冲击已结算账期

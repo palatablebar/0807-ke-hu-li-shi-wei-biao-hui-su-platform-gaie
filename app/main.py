@@ -6,6 +6,8 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from app.api import api
 from app.business import DomainIssue
 from app.config import MAX_FILE, ROOT
+from app.history.api import history_api
+from app.history.store import HistoryStore
 from app.http_errors import response
 from app.review.store import Store
 from app.spec import PROJECT
@@ -18,11 +20,19 @@ def create_app(database=None):
         database
         or os.getenv("WORKBENCH_DB", str(ROOT / "instance" / "workbench.sqlite3"))
     )
+    history_path = os.getenv(
+        "HISTORY_DB",
+        str(database.parent / "history.sqlite3") if database else str(
+            ROOT / "instance" / "history.sqlite3"
+        ),
+    )
+    app.extensions["history"] = HistoryStore(history_path)
     app.register_error_handler(DomainIssue, response)
     app.register_error_handler(
         RequestEntityTooLarge, lambda _: response(DomainIssue("FILE_TOO_LARGE"))
     )
     app.register_blueprint(api)
+    app.register_blueprint(history_api)
 
     @app.get("/")
     def home():
